@@ -51,7 +51,7 @@ export function HomeFeed() {
 
         if (tagRows) {
           for (const row of tagRows) {
-            const tag = row.room_style_tags as Tag;
+            const tag = row.room_style_tags as unknown as Tag;
             if (!tagsByImage[row.room_image_id]) {
               tagsByImage[row.room_image_id] = [];
             }
