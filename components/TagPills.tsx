@@ -1,4 +1,4 @@
-import { Tag } from '@/lib/tags'
+import type { Tag } from '@/hooks/useTags'
 
 const CATEGORY_STYLES: Record<string, string> = {
   style: 'bg-purple-50 text-purple-800 dark:bg-purple-950 dark:text-purple-200',
