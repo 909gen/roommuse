@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import type { Tag } from '@/hooks/useTags'
 
 export function useFeed(selectedTagIds: string[]) {
   const [images, setImages] = useState<any[]>([])
