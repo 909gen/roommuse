@@ -9,11 +9,19 @@ import { useTags } from "@/hooks/useTags";
 import type { RoomImageWithLikes } from "@/types/room-image";
 import type { Tag } from "@/types/tag";
 
-type PostWithTags = RoomImageWithLikes & { tags: Tag[] }
+type PostWithTags = RoomImageWithLikes & { tags: Tag[] };
 
 const SKELETON_HEIGHTS = [
-  "h-44", "h-64", "h-52", "h-72", "h-48",
-  "h-60", "h-56", "h-64", "h-52", "h-72",
+  "h-44",
+  "h-64",
+  "h-52",
+  "h-72",
+  "h-48",
+  "h-60",
+  "h-56",
+  "h-64",
+  "h-52",
+  "h-72",
 ] as const;
 
 export function HomeFeed() {
@@ -39,9 +47,8 @@ export function HomeFeed() {
         return;
       }
 
-      // fetch tags for all images in one query
-      const imageIds = result.data.map(p => p.id);
-      let tagsByImage: Record<string, Tag[]> = {};
+      const imageIds = result.data.map((p) => p.id);
+      const tagsByImage: Record<string, Tag[]> = {};
 
       if (imageIds.length > 0) {
         const { data: tagRows } = await supabase
@@ -51,33 +58,45 @@ export function HomeFeed() {
 
         if (tagRows) {
           for (const row of tagRows) {
-            const tag = row.room_style_tags as unknown as Tag;
+            const tag = row.room_style_tags?.[0] as Tag;
+
             if (!tagsByImage[row.room_image_id]) {
               tagsByImage[row.room_image_id] = [];
             }
-            tagsByImage[row.room_image_id].push(tag);
+
+            if (tag) {
+              tagsByImage[row.room_image_id].push(tag);
+            }
           }
         }
       }
 
       if (!cancelled) {
         setError(null);
-        setPosts(result.data.map(p => ({
-          ...p,
-          tags: tagsByImage[p.id] ?? [],
-        })));
+        setPosts(
+          result.data.map((p) => ({
+            ...p,
+            tags: tagsByImage[p.id] ?? [],
+          }))
+        );
         setLoading(false);
       }
     }
 
     loadPosts();
-    return () => { cancelled = true; };
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const filteredPosts = useMemo(() => {
     if (selectedTagIds.length === 0) return posts;
-    return posts.filter(post =>
-      selectedTagIds.every(tagId => post.tags.some(t => t.id === tagId))
+
+    return posts.filter((post) =>
+      selectedTagIds.every((tagId) =>
+        post.tags.some((tag) => tag.id === tagId)
+      )
     );
   }, [posts, selectedTagIds]);
 

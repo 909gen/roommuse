@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useId, useRef, useState } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { saveRoomImage, uploadRoomImageFile, validateImageFile } from "@/lib/room-images";
+import { saveImageTags } from "@/lib/tags";
 import { useTags } from "@/hooks/useTags";
 import type { Tag } from "@/types/tag";
 

@@ -47,7 +47,12 @@ export function ProfileContent({ userId }: ProfileContentProps) {
         await ensureCurrentUserProfile();
       }
 
-      const result = await fetchUserProfile(targetUserId);
+      if (!targetUserId) {
+  setLoading(false);
+  return;
+}
+
+const result = await fetchUserProfile(targetUserId);
 
       if (cancelled) {
         return;
